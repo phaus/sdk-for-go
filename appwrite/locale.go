@@ -9,11 +9,10 @@ type Locale struct {
 }
 
 func NewLocale(clt Client) Locale {  
-    service := Locale{
+	service := Locale{
 		client: clt,
 	}
-
-    return service
+	return service
 }
 
 // Get get the current user location based on IP. Returns an object with user
@@ -28,7 +27,10 @@ func (srv *Locale) Get() (map[string]interface{}, error) {
 	params := map[string]interface{}{
 	}
 
-	return srv.client.Call("GET", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("GET", path, headers, params)
 }
 
 // GetContinents list of all continents. You can use the locale header to get
@@ -39,7 +41,10 @@ func (srv *Locale) GetContinents() (map[string]interface{}, error) {
 	params := map[string]interface{}{
 	}
 
-	return srv.client.Call("GET", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("GET", path, headers, params)
 }
 
 // GetCountries list of all countries. You can use the locale header to get
@@ -50,7 +55,10 @@ func (srv *Locale) GetCountries() (map[string]interface{}, error) {
 	params := map[string]interface{}{
 	}
 
-	return srv.client.Call("GET", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("GET", path, headers, params)
 }
 
 // GetCountriesEU list of all countries that are currently members of the EU.
@@ -61,7 +69,10 @@ func (srv *Locale) GetCountriesEU() (map[string]interface{}, error) {
 	params := map[string]interface{}{
 	}
 
-	return srv.client.Call("GET", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("GET", path, headers, params)
 }
 
 // GetCountriesPhones list of all countries phone codes. You can use the
@@ -72,10 +83,13 @@ func (srv *Locale) GetCountriesPhones() (map[string]interface{}, error) {
 	params := map[string]interface{}{
 	}
 
-	return srv.client.Call("GET", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("GET", path, headers, params)
 }
 
-// GetCurrencies list of all currencies, including currency symol, name,
+// GetCurrencies list of all currencies, including currency symbol, name,
 // plural, and decimal digits for all major and minor currencies. You can use
 // the locale header to get the data in a supported language.
 func (srv *Locale) GetCurrencies() (map[string]interface{}, error) {
@@ -84,5 +98,22 @@ func (srv *Locale) GetCurrencies() (map[string]interface{}, error) {
 	params := map[string]interface{}{
 	}
 
-	return srv.client.Call("GET", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("GET", path, headers, params)
+}
+
+// GetLanguages list of all languages classified by ISO 639-1 including
+// 2-letter code, name in English, and name in the respective language.
+func (srv *Locale) GetLanguages() (map[string]interface{}, error) {
+	path := "/locale/languages"
+
+	params := map[string]interface{}{
+	}
+
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("GET", path, headers, params)
 }

@@ -10,16 +10,15 @@ type Database struct {
 }
 
 func NewDatabase(clt Client) Database {  
-    service := Database{
+	service := Database{
 		client: clt,
 	}
-
-    return service
+	return service
 }
 
 // ListCollections get a list of all the user collections. You can use the
 // query params to filter your results. On admin mode, this endpoint will
-// return a list of all of the project collections. [Learn more about
+// return a list of all of the project's collections. [Learn more about
 // different API modes](/docs/admin).
 func (srv *Database) ListCollections(Search string, Limit int, Offset int, OrderType string) (map[string]interface{}, error) {
 	path := "/database/collections"
@@ -31,7 +30,10 @@ func (srv *Database) ListCollections(Search string, Limit int, Offset int, Order
 		"orderType": OrderType,
 	}
 
-	return srv.client.Call("GET", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("GET", path, headers, params)
 }
 
 // CreateCollection create a new Collection.
@@ -45,10 +47,13 @@ func (srv *Database) CreateCollection(Name string, Read []interface{}, Write []i
 		"rules": Rules,
 	}
 
-	return srv.client.Call("POST", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("POST", path, headers, params)
 }
 
-// GetCollection get collection by its unique ID. This endpoint response
+// GetCollection get a collection by its unique ID. This endpoint response
 // returns a JSON object with the collection metadata.
 func (srv *Database) GetCollection(CollectionId string) (map[string]interface{}, error) {
 	r := strings.NewReplacer("{collectionId}", CollectionId)
@@ -57,10 +62,13 @@ func (srv *Database) GetCollection(CollectionId string) (map[string]interface{},
 	params := map[string]interface{}{
 	}
 
-	return srv.client.Call("GET", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("GET", path, headers, params)
 }
 
-// UpdateCollection update collection by its unique ID.
+// UpdateCollection update a collection by its unique ID.
 func (srv *Database) UpdateCollection(CollectionId string, Name string, Read []interface{}, Write []interface{}, Rules []interface{}) (map[string]interface{}, error) {
 	r := strings.NewReplacer("{collectionId}", CollectionId)
 	path := r.Replace("/database/collections/{collectionId}")
@@ -72,7 +80,10 @@ func (srv *Database) UpdateCollection(CollectionId string, Name string, Read []i
 		"rules": Rules,
 	}
 
-	return srv.client.Call("PUT", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("PUT", path, headers, params)
 }
 
 // DeleteCollection delete a collection by its unique ID. Only users with
@@ -84,34 +95,41 @@ func (srv *Database) DeleteCollection(CollectionId string) (map[string]interface
 	params := map[string]interface{}{
 	}
 
-	return srv.client.Call("DELETE", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("DELETE", path, headers, params)
 }
 
 // ListDocuments get a list of all the user documents. You can use the query
 // params to filter your results. On admin mode, this endpoint will return a
-// list of all of the project documents. [Learn more about different API
+// list of all of the project's documents. [Learn more about different API
 // modes](/docs/admin).
-func (srv *Database) ListDocuments(CollectionId string, Filters []interface{}, Offset int, Limit int, OrderField string, OrderType string, OrderCast string, Search string, First int, Last int) (map[string]interface{}, error) {
+func (srv *Database) ListDocuments(CollectionId string, Filters []interface{}, Limit int, Offset int, OrderField string, OrderType string, OrderCast string, Search string) (map[string]interface{}, error) {
 	r := strings.NewReplacer("{collectionId}", CollectionId)
 	path := r.Replace("/database/collections/{collectionId}/documents")
 
 	params := map[string]interface{}{
 		"filters": Filters,
-		"offset": Offset,
 		"limit": Limit,
-		"order-field": OrderField,
-		"order-type": OrderType,
-		"order-cast": OrderCast,
+		"offset": Offset,
+		"orderField": OrderField,
+		"orderType": OrderType,
+		"orderCast": OrderCast,
 		"search": Search,
-		"first": First,
-		"last": Last,
 	}
 
-	return srv.client.Call("GET", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("GET", path, headers, params)
 }
 
-// CreateDocument create a new Document.
-func (srv *Database) CreateDocument(CollectionId string, Data object, Read []interface{}, Write []interface{}, ParentDocument string, ParentProperty string, ParentPropertyType string) (map[string]interface{}, error) {
+// CreateDocument create a new Document. Before using this route, you should
+// create a new collection resource using either a [server
+// integration](/docs/server/database#databaseCreateCollection) API or
+// directly from your database console.
+func (srv *Database) CreateDocument(CollectionId string, Data interface{}, Read []interface{}, Write []interface{}, ParentDocument string, ParentProperty string, ParentPropertyType string) (map[string]interface{}, error) {
 	r := strings.NewReplacer("{collectionId}", CollectionId)
 	path := r.Replace("/database/collections/{collectionId}/documents")
 
@@ -124,11 +142,14 @@ func (srv *Database) CreateDocument(CollectionId string, Data object, Read []int
 		"parentPropertyType": ParentPropertyType,
 	}
 
-	return srv.client.Call("POST", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("POST", path, headers, params)
 }
 
-// GetDocument get document by its unique ID. This endpoint response returns a
-// JSON object with the document data.
+// GetDocument get a document by its unique ID. This endpoint response returns
+// a JSON object with the document data.
 func (srv *Database) GetDocument(CollectionId string, DocumentId string) (map[string]interface{}, error) {
 	r := strings.NewReplacer("{collectionId}", CollectionId, "{documentId}", DocumentId)
 	path := r.Replace("/database/collections/{collectionId}/documents/{documentId}")
@@ -136,11 +157,15 @@ func (srv *Database) GetDocument(CollectionId string, DocumentId string) (map[st
 	params := map[string]interface{}{
 	}
 
-	return srv.client.Call("GET", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("GET", path, headers, params)
 }
 
-// UpdateDocument
-func (srv *Database) UpdateDocument(CollectionId string, DocumentId string, Data object, Read []interface{}, Write []interface{}) (map[string]interface{}, error) {
+// UpdateDocument update a document by its unique ID. Using the patch method
+// you can pass only specific fields that will get updated.
+func (srv *Database) UpdateDocument(CollectionId string, DocumentId string, Data interface{}, Read []interface{}, Write []interface{}) (map[string]interface{}, error) {
 	r := strings.NewReplacer("{collectionId}", CollectionId, "{documentId}", DocumentId)
 	path := r.Replace("/database/collections/{collectionId}/documents/{documentId}")
 
@@ -150,11 +175,14 @@ func (srv *Database) UpdateDocument(CollectionId string, DocumentId string, Data
 		"write": Write,
 	}
 
-	return srv.client.Call("PATCH", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("PATCH", path, headers, params)
 }
 
-// DeleteDocument delete document by its unique ID. This endpoint deletes only
-// the parent documents, his attributes and relations to other documents.
+// DeleteDocument delete a document by its unique ID. This endpoint deletes
+// only the parent documents, its attributes and relations to other documents.
 // Child documents **will not** be deleted.
 func (srv *Database) DeleteDocument(CollectionId string, DocumentId string) (map[string]interface{}, error) {
 	r := strings.NewReplacer("{collectionId}", CollectionId, "{documentId}", DocumentId)
@@ -163,5 +191,8 @@ func (srv *Database) DeleteDocument(CollectionId string, DocumentId string) (map
 	params := map[string]interface{}{
 	}
 
-	return srv.client.Call("DELETE", path, nil, params)
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("DELETE", path, headers, params)
 }

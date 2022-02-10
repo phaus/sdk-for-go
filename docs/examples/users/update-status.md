@@ -8,14 +8,15 @@ import (
 func main() {
     var client := appwrite.Client{}
 
-    client.SetProject("5df5acd0d48c2") // Your project ID
-    client.SetKey("919c2d18fb5d4...a2ae413da83346ad2") // Your secret API key
+    client.SetEndpoint("https://[HOSTNAME_OR_IP]/v1") // Your API Endpoint
+    client.SetProject("") // Your project ID
+    client.SetKey("") // Your secret API key
 
     var service := appwrite.Users{
         client: &client
     }
 
-    var response, error := service.UpdateStatus("[USER_ID]", "1")
+    var response, error := service.UpdateStatus("[USER_ID]", 1)
 
     if error != nil {
         panic(error)
