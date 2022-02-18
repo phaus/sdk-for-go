@@ -9,16 +9,15 @@ type Users struct {
 	client Client
 }
 
-func NewUsers(clt Client) Users {  
-	service := Users{
+func NewUsers(clt Client) *Users {
+	return &Users{
 		client: clt,
 	}
-	return service
 }
 
 // List get a list of all the project's users. You can use the query params to
 // filter your results.
-func (srv *Users) List(Search string, Limit int, Offset int, OrderType string) (map[string]interface{}, error) {
+func (srv *Users) List(Search string, Limit int, Offset int, OrderType string) (*ClientResponse, error) {
 	path := "/users"
 
 	params := map[string]interface{}{
@@ -35,7 +34,7 @@ func (srv *Users) List(Search string, Limit int, Offset int, OrderType string) (
 }
 
 // Create create a new user.
-func (srv *Users) Create(Email string, Password string, Name string) (map[string]interface{}, error) {
+func (srv *Users) Create(Email string, Password string, Name string) (*ClientResponse, error) {
 	path := "/users"
 
 	params := map[string]interface{}{
@@ -51,7 +50,7 @@ func (srv *Users) Create(Email string, Password string, Name string) (map[string
 }
 
 // Get get a user by its unique ID.
-func (srv *Users) Get(UserId string) (map[string]interface{}, error) {
+func (srv *Users) Get(UserId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}")
 
@@ -65,7 +64,7 @@ func (srv *Users) Get(UserId string) (map[string]interface{}, error) {
 }
 
 // Delete delete a user by its unique ID.
-func (srv *Users) Delete(UserId string) (map[string]interface{}, error) {
+func (srv *Users) Delete(UserId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}")
 
@@ -79,7 +78,7 @@ func (srv *Users) Delete(UserId string) (map[string]interface{}, error) {
 }
 
 // UpdateEmail update the user email by its unique ID.
-func (srv *Users) UpdateEmail(UserId string, Email string) (map[string]interface{}, error) {
+func (srv *Users) UpdateEmail(UserId string, Email string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}/email")
 
@@ -94,7 +93,7 @@ func (srv *Users) UpdateEmail(UserId string, Email string) (map[string]interface
 }
 
 // GetLogs get a user activity logs list by its unique ID.
-func (srv *Users) GetLogs(UserId string) (map[string]interface{}, error) {
+func (srv *Users) GetLogs(UserId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}/logs")
 
@@ -108,7 +107,7 @@ func (srv *Users) GetLogs(UserId string) (map[string]interface{}, error) {
 }
 
 // UpdateName update the user name by its unique ID.
-func (srv *Users) UpdateName(UserId string, Name string) (map[string]interface{}, error) {
+func (srv *Users) UpdateName(UserId string, Name string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}/name")
 
@@ -123,7 +122,7 @@ func (srv *Users) UpdateName(UserId string, Name string) (map[string]interface{}
 }
 
 // UpdatePassword update the user password by its unique ID.
-func (srv *Users) UpdatePassword(UserId string, Password string) (map[string]interface{}, error) {
+func (srv *Users) UpdatePassword(UserId string, Password string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}/password")
 
@@ -138,7 +137,7 @@ func (srv *Users) UpdatePassword(UserId string, Password string) (map[string]int
 }
 
 // GetPrefs get the user preferences by its unique ID.
-func (srv *Users) GetPrefs(UserId string) (map[string]interface{}, error) {
+func (srv *Users) GetPrefs(UserId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}/prefs")
 
@@ -153,7 +152,7 @@ func (srv *Users) GetPrefs(UserId string) (map[string]interface{}, error) {
 
 // UpdatePrefs update the user preferences by its unique ID. You can pass only
 // the specific settings you wish to update.
-func (srv *Users) UpdatePrefs(UserId string, Prefs interface{}) (map[string]interface{}, error) {
+func (srv *Users) UpdatePrefs(UserId string, Prefs interface{}) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}/prefs")
 
@@ -168,7 +167,7 @@ func (srv *Users) UpdatePrefs(UserId string, Prefs interface{}) (map[string]inte
 }
 
 // GetSessions get the user sessions list by its unique ID.
-func (srv *Users) GetSessions(UserId string) (map[string]interface{}, error) {
+func (srv *Users) GetSessions(UserId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}/sessions")
 
@@ -182,7 +181,7 @@ func (srv *Users) GetSessions(UserId string) (map[string]interface{}, error) {
 }
 
 // DeleteSessions delete all user's sessions by using the user's unique ID.
-func (srv *Users) DeleteSessions(UserId string) (map[string]interface{}, error) {
+func (srv *Users) DeleteSessions(UserId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}/sessions")
 
@@ -196,7 +195,7 @@ func (srv *Users) DeleteSessions(UserId string) (map[string]interface{}, error) 
 }
 
 // DeleteSession delete a user sessions by its unique ID.
-func (srv *Users) DeleteSession(UserId string, SessionId string) (map[string]interface{}, error) {
+func (srv *Users) DeleteSession(UserId string, SessionId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId, "{sessionId}", SessionId)
 	path := r.Replace("/users/{userId}/sessions/{sessionId}")
 
@@ -210,7 +209,7 @@ func (srv *Users) DeleteSession(UserId string, SessionId string) (map[string]int
 }
 
 // UpdateStatus update the user status by its unique ID.
-func (srv *Users) UpdateStatus(UserId string, Status int) (map[string]interface{}, error) {
+func (srv *Users) UpdateStatus(UserId string, Status int) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}/status")
 
@@ -226,7 +225,7 @@ func (srv *Users) UpdateStatus(UserId string, Status int) (map[string]interface{
 
 // UpdateVerification update the user email verification status by its unique
 // ID.
-func (srv *Users) UpdateVerification(UserId string, EmailVerification bool) (map[string]interface{}, error) {
+func (srv *Users) UpdateVerification(UserId string, EmailVerification bool) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}/verification")
 

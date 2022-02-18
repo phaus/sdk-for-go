@@ -30,6 +30,14 @@ type AppwriteError struct {
 	message    string
 }
 
+// ClientResponse - represents the client response
+type ClientResponse struct {
+	Status     string
+	StatusCode int
+	Header     http.Header
+	Result     string
+}
+
 func (ce *AppwriteError) Error() string {
 	return ce.message
 }
@@ -42,7 +50,7 @@ func (ce *AppwriteError) GetStatusCode() int {
 	return ce.statusCode
 }
 
-// Client is the client struct to access Appwrite services
+// Client is the client struct to access Appwrite  services
 type Client struct {
 	client     *http.Client
 	headers    map[string]string
@@ -180,7 +188,7 @@ func (clt *Client) newfileUploadRequest(uri string, params map[string]interface{
 }
 
 // Call an API using Client
-func (clt *Client) Call(method string, path string, headers map[string]interface{}, params map[string]interface{}) (map[string]interface{}, error) {
+func (clt *Client) Call(method string, path string, headers map[string]interface{}, params map[string]interface{}) (*ClientResponse, error) {
 	if clt.client == nil {
 		// Create HTTP client
 		httpClient, err := getDefaultClient(clt.timeout)
@@ -296,9 +304,16 @@ func (clt *Client) Call(method string, path string, headers map[string]interface
 				message:    message,
 			}
 		}
-		jsonResponse["status"] = resp.StatusCode
-		jsonResponse["headers"] = resp.Header
-		return jsonResponse, nil
+		output,  ok := jsonResponse["result"].(string)
+		if !ok {
+			return nil, fmt.Errorf("invalid response type %v", jsonResponse)
+		}
+		return &ClientResponse{
+			Status:     resp.Status,
+			StatusCode: resp.StatusCode,
+			Header:     resp.Header,
+			Result:     string(output),
+		}, nil
 	}
 	output, err := getOutput(params, fileNameKey, responseData, resp.Header.Get("content-type"))
 	if err != nil {
@@ -310,10 +325,12 @@ func (clt *Client) Call(method string, path string, headers map[string]interface
 			message:    output,
 		}
 	}
-	return map[string]interface{}{
-		"status":  resp.StatusCode,
-		"headers": resp.Header,
-		"result":  output}, nil
+	return &ClientResponse{
+		Status:     resp.Status,
+		StatusCode: resp.StatusCode,
+		Header:     resp.Header,
+		Result:     output,
+	}, nil
 }
 
 func getOutput(params map[string]interface{}, paramName string, responseData []byte, contentType string) (string, error) {

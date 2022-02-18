@@ -8,15 +8,14 @@ type Health struct {
 	client Client
 }
 
-func NewHealth(clt Client) Health {  
-	service := Health{
+func NewHealth(clt Client) *Health {
+	return &Health{
 		client: clt,
 	}
-	return service
 }
 
 // Get check the Appwrite HTTP server is up and responsive.
-func (srv *Health) Get() (map[string]interface{}, error) {
+func (srv *Health) Get() (*ClientResponse, error) {
 	path := "/health"
 
 	params := map[string]interface{}{
@@ -30,7 +29,7 @@ func (srv *Health) Get() (map[string]interface{}, error) {
 
 // GetAntiVirus check the Appwrite Anti Virus server is up and connection is
 // successful.
-func (srv *Health) GetAntiVirus() (map[string]interface{}, error) {
+func (srv *Health) GetAntiVirus() (*ClientResponse, error) {
 	path := "/health/anti-virus"
 
 	params := map[string]interface{}{
@@ -44,7 +43,7 @@ func (srv *Health) GetAntiVirus() (map[string]interface{}, error) {
 
 // GetCache check the Appwrite in-memory cache server is up and connection is
 // successful.
-func (srv *Health) GetCache() (map[string]interface{}, error) {
+func (srv *Health) GetCache() (*ClientResponse, error) {
 	path := "/health/cache"
 
 	params := map[string]interface{}{
@@ -58,7 +57,7 @@ func (srv *Health) GetCache() (map[string]interface{}, error) {
 
 // GetDB check the Appwrite database server is up and connection is
 // successful.
-func (srv *Health) GetDB() (map[string]interface{}, error) {
+func (srv *Health) GetDB() (*ClientResponse, error) {
 	path := "/health/db"
 
 	params := map[string]interface{}{
@@ -73,7 +72,7 @@ func (srv *Health) GetDB() (map[string]interface{}, error) {
 // GetQueueCertificates get the number of certificates that are waiting to be
 // issued against [Letsencrypt](https://letsencrypt.org/) in the Appwrite
 // internal queue server.
-func (srv *Health) GetQueueCertificates() (map[string]interface{}, error) {
+func (srv *Health) GetQueueCertificates() (*ClientResponse, error) {
 	path := "/health/queue/certificates"
 
 	params := map[string]interface{}{
@@ -86,7 +85,7 @@ func (srv *Health) GetQueueCertificates() (map[string]interface{}, error) {
 }
 
 // GetQueueFunctions
-func (srv *Health) GetQueueFunctions() (map[string]interface{}, error) {
+func (srv *Health) GetQueueFunctions() (*ClientResponse, error) {
 	path := "/health/queue/functions"
 
 	params := map[string]interface{}{
@@ -100,7 +99,7 @@ func (srv *Health) GetQueueFunctions() (map[string]interface{}, error) {
 
 // GetQueueLogs get the number of logs that are waiting to be processed in the
 // Appwrite internal queue server.
-func (srv *Health) GetQueueLogs() (map[string]interface{}, error) {
+func (srv *Health) GetQueueLogs() (*ClientResponse, error) {
 	path := "/health/queue/logs"
 
 	params := map[string]interface{}{
@@ -114,7 +113,7 @@ func (srv *Health) GetQueueLogs() (map[string]interface{}, error) {
 
 // GetQueueTasks get the number of tasks that are waiting to be processed in
 // the Appwrite internal queue server.
-func (srv *Health) GetQueueTasks() (map[string]interface{}, error) {
+func (srv *Health) GetQueueTasks() (*ClientResponse, error) {
 	path := "/health/queue/tasks"
 
 	params := map[string]interface{}{
@@ -128,7 +127,7 @@ func (srv *Health) GetQueueTasks() (map[string]interface{}, error) {
 
 // GetQueueUsage get the number of usage stats that are waiting to be
 // processed in the Appwrite internal queue server.
-func (srv *Health) GetQueueUsage() (map[string]interface{}, error) {
+func (srv *Health) GetQueueUsage() (*ClientResponse, error) {
 	path := "/health/queue/usage"
 
 	params := map[string]interface{}{
@@ -142,7 +141,7 @@ func (srv *Health) GetQueueUsage() (map[string]interface{}, error) {
 
 // GetQueueWebhooks get the number of webhooks that are waiting to be
 // processed in the Appwrite internal queue server.
-func (srv *Health) GetQueueWebhooks() (map[string]interface{}, error) {
+func (srv *Health) GetQueueWebhooks() (*ClientResponse, error) {
 	path := "/health/queue/webhooks"
 
 	params := map[string]interface{}{
@@ -156,7 +155,7 @@ func (srv *Health) GetQueueWebhooks() (map[string]interface{}, error) {
 
 // GetStorageLocal check the Appwrite local storage device is up and
 // connection is successful.
-func (srv *Health) GetStorageLocal() (map[string]interface{}, error) {
+func (srv *Health) GetStorageLocal() (*ClientResponse, error) {
 	path := "/health/storage/local"
 
 	params := map[string]interface{}{
@@ -175,7 +174,7 @@ func (srv *Health) GetStorageLocal() (map[string]interface{}, error) {
 // used by hundreds of millions of computers and devices to synchronize their
 // clocks over the Internet. If your computer sets its own clock, it likely
 // uses NTP.
-func (srv *Health) GetTime() (map[string]interface{}, error) {
+func (srv *Health) GetTime() (*ClientResponse, error) {
 	path := "/health/time"
 
 	params := map[string]interface{}{

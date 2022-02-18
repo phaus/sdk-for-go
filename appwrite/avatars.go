@@ -9,18 +9,17 @@ type Avatars struct {
 	client Client
 }
 
-func NewAvatars(clt Client) Avatars {  
-	service := Avatars{
+func NewAvatars(clt Client) *Avatars {
+	return &Avatars{
 		client: clt,
 	}
-	return service
 }
 
 // GetBrowser you can use this endpoint to show different browser icons to
 // your users. The code argument receives the browser code as it appears in
 // your user /account/sessions endpoint. Use width, height and quality
 // arguments to change the output settings.
-func (srv *Avatars) GetBrowser(Code string, Width int, Height int, Quality int) (map[string]interface{}, error) {
+func (srv *Avatars) GetBrowser(Code string, Width int, Height int, Quality int) (*ClientResponse, error) {
 	r := strings.NewReplacer("{code}", Code)
 	path := r.Replace("/avatars/browsers/{code}")
 
@@ -39,7 +38,7 @@ func (srv *Avatars) GetBrowser(Code string, Width int, Height int, Quality int) 
 // GetCreditCard the credit card endpoint will return you the icon of the
 // credit card provider you need. Use width, height and quality arguments to
 // change the output settings.
-func (srv *Avatars) GetCreditCard(Code string, Width int, Height int, Quality int) (map[string]interface{}, error) {
+func (srv *Avatars) GetCreditCard(Code string, Width int, Height int, Quality int) (*ClientResponse, error) {
 	r := strings.NewReplacer("{code}", Code)
 	path := r.Replace("/avatars/credit-cards/{code}")
 
@@ -58,7 +57,7 @@ func (srv *Avatars) GetCreditCard(Code string, Width int, Height int, Quality in
 // GetFavicon use this endpoint to fetch the favorite icon (AKA favicon) of
 // any remote website URL.
 // 
-func (srv *Avatars) GetFavicon(Url string) (map[string]interface{}, error) {
+func (srv *Avatars) GetFavicon(Url string) (*ClientResponse, error) {
 	path := "/avatars/favicon"
 
 	params := map[string]interface{}{
@@ -74,7 +73,7 @@ func (srv *Avatars) GetFavicon(Url string) (map[string]interface{}, error) {
 // GetFlag you can use this endpoint to show different country flags icons to
 // your users. The code argument receives the 2 letter country code. Use
 // width, height and quality arguments to change the output settings.
-func (srv *Avatars) GetFlag(Code string, Width int, Height int, Quality int) (map[string]interface{}, error) {
+func (srv *Avatars) GetFlag(Code string, Width int, Height int, Quality int) (*ClientResponse, error) {
 	r := strings.NewReplacer("{code}", Code)
 	path := r.Replace("/avatars/flags/{code}")
 
@@ -94,7 +93,7 @@ func (srv *Avatars) GetFlag(Code string, Width int, Height int, Quality int) (ma
 // image size you want. This endpoint is very useful if you need to crop and
 // display remote images in your app or in case you want to make sure a 3rd
 // party image is properly served using a TLS protocol.
-func (srv *Avatars) GetImage(Url string, Width int, Height int) (map[string]interface{}, error) {
+func (srv *Avatars) GetImage(Url string, Width int, Height int) (*ClientResponse, error) {
 	path := "/avatars/image"
 
 	params := map[string]interface{}{
@@ -119,7 +118,7 @@ func (srv *Avatars) GetImage(Url string, Width int, Height int) (map[string]inte
 // default, a random theme will be selected. The random theme will persist for
 // the user's initials when reloading the same theme will always return for
 // the same initials.
-func (srv *Avatars) GetInitials(Name string, Width int, Height int, Color string, Background string) (map[string]interface{}, error) {
+func (srv *Avatars) GetInitials(Name string, Width int, Height int, Color string, Background string) (*ClientResponse, error) {
 	path := "/avatars/initials"
 
 	params := map[string]interface{}{
@@ -138,7 +137,7 @@ func (srv *Avatars) GetInitials(Name string, Width int, Height int, Color string
 
 // GetQR converts a given plain text to a QR code image. You can use the query
 // parameters to change the size and style of the resulting image.
-func (srv *Avatars) GetQR(Text string, Size int, Margin int, Download bool) (map[string]interface{}, error) {
+func (srv *Avatars) GetQR(Text string, Size int, Margin int, Download bool) (*ClientResponse, error) {
 	path := "/avatars/qr"
 
 	params := map[string]interface{}{

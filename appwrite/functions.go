@@ -9,16 +9,15 @@ type Functions struct {
 	client Client
 }
 
-func NewFunctions(clt Client) Functions {  
-	service := Functions{
+func NewFunctions(clt Client) *Functions {
+	return &Functions{
 		client: clt,
 	}
-	return service
 }
 
 // List get a list of all the project's functions. You can use the query
 // params to filter your results.
-func (srv *Functions) List(Search string, Limit int, Offset int, OrderType string) (map[string]interface{}, error) {
+func (srv *Functions) List(Search string, Limit int, Offset int, OrderType string) (*ClientResponse, error) {
 	path := "/functions"
 
 	params := map[string]interface{}{
@@ -37,7 +36,7 @@ func (srv *Functions) List(Search string, Limit int, Offset int, OrderType strin
 // Create create a new function. You can pass a list of
 // [permissions](/docs/permissions) to allow different project users or team
 // with access to execute the function using the client API.
-func (srv *Functions) Create(Name string, Execute []interface{}, Runtime string, Vars interface{}, Events []interface{}, Schedule string, Timeout int) (map[string]interface{}, error) {
+func (srv *Functions) Create(Name string, Execute []interface{}, Runtime string, Vars interface{}, Events []interface{}, Schedule string, Timeout int) (*ClientResponse, error) {
 	path := "/functions"
 
 	params := map[string]interface{}{
@@ -57,7 +56,7 @@ func (srv *Functions) Create(Name string, Execute []interface{}, Runtime string,
 }
 
 // Get get a function by its unique ID.
-func (srv *Functions) Get(FunctionId string) (map[string]interface{}, error) {
+func (srv *Functions) Get(FunctionId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{functionId}", FunctionId)
 	path := r.Replace("/functions/{functionId}")
 
@@ -71,7 +70,7 @@ func (srv *Functions) Get(FunctionId string) (map[string]interface{}, error) {
 }
 
 // Update update function by its unique ID.
-func (srv *Functions) Update(FunctionId string, Name string, Execute []interface{}, Vars interface{}, Events []interface{}, Schedule string, Timeout int) (map[string]interface{}, error) {
+func (srv *Functions) Update(FunctionId string, Name string, Execute []interface{}, Vars interface{}, Events []interface{}, Schedule string, Timeout int) (*ClientResponse, error) {
 	r := strings.NewReplacer("{functionId}", FunctionId)
 	path := r.Replace("/functions/{functionId}")
 
@@ -91,7 +90,7 @@ func (srv *Functions) Update(FunctionId string, Name string, Execute []interface
 }
 
 // Delete delete a function by its unique ID.
-func (srv *Functions) Delete(FunctionId string) (map[string]interface{}, error) {
+func (srv *Functions) Delete(FunctionId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{functionId}", FunctionId)
 	path := r.Replace("/functions/{functionId}")
 
@@ -108,7 +107,7 @@ func (srv *Functions) Delete(FunctionId string) (map[string]interface{}, error) 
 // You can use the query params to filter your results. On admin mode, this
 // endpoint will return a list of all of the project's executions. [Learn more
 // about different API modes](/docs/admin).
-func (srv *Functions) ListExecutions(FunctionId string, Search string, Limit int, Offset int, OrderType string) (map[string]interface{}, error) {
+func (srv *Functions) ListExecutions(FunctionId string, Search string, Limit int, Offset int, OrderType string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{functionId}", FunctionId)
 	path := r.Replace("/functions/{functionId}/executions")
 
@@ -129,7 +128,7 @@ func (srv *Functions) ListExecutions(FunctionId string, Search string, Limit int
 // return you the current execution status. You can ping the `Get Execution`
 // endpoint to get updates on the current execution status. Once this endpoint
 // is called, your function execution process will start asynchronously.
-func (srv *Functions) CreateExecution(FunctionId string, Data string) (map[string]interface{}, error) {
+func (srv *Functions) CreateExecution(FunctionId string, Data string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{functionId}", FunctionId)
 	path := r.Replace("/functions/{functionId}/executions")
 
@@ -144,7 +143,7 @@ func (srv *Functions) CreateExecution(FunctionId string, Data string) (map[strin
 }
 
 // GetExecution get a function execution log by its unique ID.
-func (srv *Functions) GetExecution(FunctionId string, ExecutionId string) (map[string]interface{}, error) {
+func (srv *Functions) GetExecution(FunctionId string, ExecutionId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{functionId}", FunctionId, "{executionId}", ExecutionId)
 	path := r.Replace("/functions/{functionId}/executions/{executionId}")
 
@@ -160,7 +159,7 @@ func (srv *Functions) GetExecution(FunctionId string, ExecutionId string) (map[s
 // UpdateTag update the function code tag ID using the unique function ID. Use
 // this endpoint to switch the code tag that should be executed by the
 // execution endpoint.
-func (srv *Functions) UpdateTag(FunctionId string, Tag string) (map[string]interface{}, error) {
+func (srv *Functions) UpdateTag(FunctionId string, Tag string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{functionId}", FunctionId)
 	path := r.Replace("/functions/{functionId}/tag")
 
@@ -176,7 +175,7 @@ func (srv *Functions) UpdateTag(FunctionId string, Tag string) (map[string]inter
 
 // ListTags get a list of all the project's code tags. You can use the query
 // params to filter your results.
-func (srv *Functions) ListTags(FunctionId string, Search string, Limit int, Offset int, OrderType string) (map[string]interface{}, error) {
+func (srv *Functions) ListTags(FunctionId string, Search string, Limit int, Offset int, OrderType string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{functionId}", FunctionId)
 	path := r.Replace("/functions/{functionId}/tags")
 
@@ -203,7 +202,7 @@ func (srv *Functions) ListTags(FunctionId string, Search string, Limit int, Offs
 // tutorial](/docs/functions).
 // 
 // Use the "command" param to set the entry point used to execute your code.
-func (srv *Functions) CreateTag(FunctionId string, Command string, Code string) (map[string]interface{}, error) {
+func (srv *Functions) CreateTag(FunctionId string, Command string, Code string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{functionId}", FunctionId)
 	path := r.Replace("/functions/{functionId}/tags")
 
@@ -219,7 +218,7 @@ func (srv *Functions) CreateTag(FunctionId string, Command string, Code string) 
 }
 
 // GetTag get a code tag by its unique ID.
-func (srv *Functions) GetTag(FunctionId string, TagId string) (map[string]interface{}, error) {
+func (srv *Functions) GetTag(FunctionId string, TagId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{functionId}", FunctionId, "{tagId}", TagId)
 	path := r.Replace("/functions/{functionId}/tags/{tagId}")
 
@@ -233,7 +232,7 @@ func (srv *Functions) GetTag(FunctionId string, TagId string) (map[string]interf
 }
 
 // DeleteTag delete a code tag by its unique ID.
-func (srv *Functions) DeleteTag(FunctionId string, TagId string) (map[string]interface{}, error) {
+func (srv *Functions) DeleteTag(FunctionId string, TagId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{functionId}", FunctionId, "{tagId}", TagId)
 	path := r.Replace("/functions/{functionId}/tags/{tagId}")
 

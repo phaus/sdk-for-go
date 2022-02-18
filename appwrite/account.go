@@ -9,15 +9,14 @@ type Account struct {
 	client Client
 }
 
-func NewAccount(clt Client) Account {  
-	service := Account{
+func NewAccount(clt Client) *Account {
+	return &Account{
 		client: clt,
 	}
-	return service
 }
 
 // Get get currently logged in user data as JSON object.
-func (srv *Account) Get() (map[string]interface{}, error) {
+func (srv *Account) Get() (*ClientResponse, error) {
 	path := "/account"
 
 	params := map[string]interface{}{
@@ -34,7 +33,7 @@ func (srv *Account) Get() (map[string]interface{}, error) {
 // done to avoid deleted accounts being overtaken by new users with the same
 // email address. Any user-related resources like documents or storage files
 // should be deleted separately.
-func (srv *Account) Delete() (map[string]interface{}, error) {
+func (srv *Account) Delete() (*ClientResponse, error) {
 	path := "/account"
 
 	params := map[string]interface{}{
@@ -52,7 +51,7 @@ func (srv *Account) Delete() (map[string]interface{}, error) {
 // to complete this request.
 // This endpoint can also be used to convert an anonymous account to a normal
 // one, by passing an email address and a new password.
-func (srv *Account) UpdateEmail(Email string, Password string) (map[string]interface{}, error) {
+func (srv *Account) UpdateEmail(Email string, Password string) (*ClientResponse, error) {
 	path := "/account/email"
 
 	params := map[string]interface{}{
@@ -68,7 +67,7 @@ func (srv *Account) UpdateEmail(Email string, Password string) (map[string]inter
 
 // GetLogs get currently logged in user list of latest security activity logs.
 // Each log returns user IP address, location and date and time of log.
-func (srv *Account) GetLogs() (map[string]interface{}, error) {
+func (srv *Account) GetLogs() (*ClientResponse, error) {
 	path := "/account/logs"
 
 	params := map[string]interface{}{
@@ -81,7 +80,7 @@ func (srv *Account) GetLogs() (map[string]interface{}, error) {
 }
 
 // UpdateName update currently logged in user account name.
-func (srv *Account) UpdateName(Name string) (map[string]interface{}, error) {
+func (srv *Account) UpdateName(Name string) (*ClientResponse, error) {
 	path := "/account/name"
 
 	params := map[string]interface{}{
@@ -97,7 +96,7 @@ func (srv *Account) UpdateName(Name string) (map[string]interface{}, error) {
 // UpdatePassword update currently logged in user password. For validation,
 // user is required to pass in the new password, and the old password. For
 // users created with OAuth and Team Invites, oldPassword is optional.
-func (srv *Account) UpdatePassword(Password string, OldPassword string) (map[string]interface{}, error) {
+func (srv *Account) UpdatePassword(Password string, OldPassword string) (*ClientResponse, error) {
 	path := "/account/password"
 
 	params := map[string]interface{}{
@@ -112,7 +111,7 @@ func (srv *Account) UpdatePassword(Password string, OldPassword string) (map[str
 }
 
 // GetPrefs get currently logged in user preferences as a key-value object.
-func (srv *Account) GetPrefs() (map[string]interface{}, error) {
+func (srv *Account) GetPrefs() (*ClientResponse, error) {
 	path := "/account/prefs"
 
 	params := map[string]interface{}{
@@ -126,7 +125,7 @@ func (srv *Account) GetPrefs() (map[string]interface{}, error) {
 
 // UpdatePrefs update currently logged in user account preferences. You can
 // pass only the specific settings you wish to update.
-func (srv *Account) UpdatePrefs(Prefs interface{}) (map[string]interface{}, error) {
+func (srv *Account) UpdatePrefs(Prefs interface{}) (*ClientResponse, error) {
 	path := "/account/prefs"
 
 	params := map[string]interface{}{
@@ -147,7 +146,7 @@ func (srv *Account) UpdatePrefs(Prefs interface{}) (map[string]interface{}, erro
 // /account/recovery](/docs/client/account#accountUpdateRecovery) endpoint to
 // complete the process. The verification link sent to the user's email
 // address is valid for 1 hour.
-func (srv *Account) CreateRecovery(Email string, Url string) (map[string]interface{}, error) {
+func (srv *Account) CreateRecovery(Email string, Url string) (*ClientResponse, error) {
 	path := "/account/recovery"
 
 	params := map[string]interface{}{
@@ -171,7 +170,7 @@ func (srv *Account) CreateRecovery(Email string, Url string) (map[string]interfa
 // Attack](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.md)
 // the only valid redirect URLs are the ones from domains you have set when
 // adding your platforms in the console interface.
-func (srv *Account) UpdateRecovery(UserId string, Secret string, Password string, PasswordAgain string) (map[string]interface{}, error) {
+func (srv *Account) UpdateRecovery(UserId string, Secret string, Password string, PasswordAgain string) (*ClientResponse, error) {
 	path := "/account/recovery"
 
 	params := map[string]interface{}{
@@ -189,7 +188,7 @@ func (srv *Account) UpdateRecovery(UserId string, Secret string, Password string
 
 // GetSessions get currently logged in user list of active sessions across
 // different devices.
-func (srv *Account) GetSessions() (map[string]interface{}, error) {
+func (srv *Account) GetSessions() (*ClientResponse, error) {
 	path := "/account/sessions"
 
 	params := map[string]interface{}{
@@ -203,7 +202,7 @@ func (srv *Account) GetSessions() (map[string]interface{}, error) {
 
 // DeleteSessions delete all sessions from the user account and remove any
 // sessions cookies from the end client.
-func (srv *Account) DeleteSessions() (map[string]interface{}, error) {
+func (srv *Account) DeleteSessions() (*ClientResponse, error) {
 	path := "/account/sessions"
 
 	params := map[string]interface{}{
@@ -217,7 +216,7 @@ func (srv *Account) DeleteSessions() (map[string]interface{}, error) {
 
 // GetSession use this endpoint to get a logged in user's session using a
 // Session ID. Inputting 'current' will return the current session being used.
-func (srv *Account) GetSession(SessionId string) (map[string]interface{}, error) {
+func (srv *Account) GetSession(SessionId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{sessionId}", SessionId)
 	path := r.Replace("/account/sessions/{sessionId}")
 
@@ -234,7 +233,7 @@ func (srv *Account) GetSession(SessionId string) (map[string]interface{}, error)
 // from all their account sessions across all of their different devices. When
 // using the option id argument, only the session unique ID provider will be
 // deleted.
-func (srv *Account) DeleteSession(SessionId string) (map[string]interface{}, error) {
+func (srv *Account) DeleteSession(SessionId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{sessionId}", SessionId)
 	path := r.Replace("/account/sessions/{sessionId}")
 
@@ -262,7 +261,7 @@ func (srv *Account) DeleteSession(SessionId string) (map[string]interface{}, err
 // the only valid redirect URLs are the ones from domains you have set when
 // adding your platforms in the console interface.
 // 
-func (srv *Account) CreateVerification(Url string) (map[string]interface{}, error) {
+func (srv *Account) CreateVerification(Url string) (*ClientResponse, error) {
 	path := "/account/verification"
 
 	params := map[string]interface{}{
@@ -279,7 +278,7 @@ func (srv *Account) CreateVerification(Url string) (map[string]interface{}, erro
 // verification process. Use both the **userId** and **secret** parameters
 // that were attached to your app URL to verify the user email ownership. If
 // confirmed this route will return a 200 status code.
-func (srv *Account) UpdateVerification(UserId string, Secret string) (map[string]interface{}, error) {
+func (srv *Account) UpdateVerification(UserId string, Secret string) (*ClientResponse, error) {
 	path := "/account/verification"
 
 	params := map[string]interface{}{

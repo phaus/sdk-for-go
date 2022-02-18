@@ -9,18 +9,17 @@ type Teams struct {
 	client Client
 }
 
-func NewTeams(clt Client) Teams {  
-	service := Teams{
+func NewTeams(clt Client) *Teams {
+	return &Teams{
 		client: clt,
 	}
-	return service
 }
 
 // List get a list of all the current user teams. You can use the query params
 // to filter your results. On admin mode, this endpoint will return a list of
 // all of the project's teams. [Learn more about different API
 // modes](/docs/admin).
-func (srv *Teams) List(Search string, Limit int, Offset int, OrderType string) (map[string]interface{}, error) {
+func (srv *Teams) List(Search string, Limit int, Offset int, OrderType string) (*ClientResponse, error) {
 	path := "/teams"
 
 	params := map[string]interface{}{
@@ -40,7 +39,7 @@ func (srv *Teams) List(Search string, Limit int, Offset int, OrderType string) (
 // be assigned as the owner of the team. The team owner can invite new
 // members, who will be able add new owners and update or delete the team from
 // your project.
-func (srv *Teams) Create(Name string, Roles []interface{}) (map[string]interface{}, error) {
+func (srv *Teams) Create(Name string, Roles []interface{}) (*ClientResponse, error) {
 	path := "/teams"
 
 	params := map[string]interface{}{
@@ -56,7 +55,7 @@ func (srv *Teams) Create(Name string, Roles []interface{}) (map[string]interface
 
 // Get get a team by its unique ID. All team members have read access for this
 // resource.
-func (srv *Teams) Get(TeamId string) (map[string]interface{}, error) {
+func (srv *Teams) Get(TeamId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{teamId}", TeamId)
 	path := r.Replace("/teams/{teamId}")
 
@@ -71,7 +70,7 @@ func (srv *Teams) Get(TeamId string) (map[string]interface{}, error) {
 
 // Update update a team by its unique ID. Only team owners have write access
 // for this resource.
-func (srv *Teams) Update(TeamId string, Name string) (map[string]interface{}, error) {
+func (srv *Teams) Update(TeamId string, Name string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{teamId}", TeamId)
 	path := r.Replace("/teams/{teamId}")
 
@@ -87,7 +86,7 @@ func (srv *Teams) Update(TeamId string, Name string) (map[string]interface{}, er
 
 // Delete delete a team by its unique ID. Only team owners have write access
 // for this resource.
-func (srv *Teams) Delete(TeamId string) (map[string]interface{}, error) {
+func (srv *Teams) Delete(TeamId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{teamId}", TeamId)
 	path := r.Replace("/teams/{teamId}")
 
@@ -102,7 +101,7 @@ func (srv *Teams) Delete(TeamId string) (map[string]interface{}, error) {
 
 // GetMemberships get a team members by the team unique ID. All team members
 // have read access for this list of resources.
-func (srv *Teams) GetMemberships(TeamId string, Search string, Limit int, Offset int, OrderType string) (map[string]interface{}, error) {
+func (srv *Teams) GetMemberships(TeamId string, Search string, Limit int, Offset int, OrderType string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{teamId}", TeamId)
 	path := r.Replace("/teams/{teamId}/memberships")
 
@@ -135,7 +134,7 @@ func (srv *Teams) GetMemberships(TeamId string, Search string, Limit int, Offset
 // Attacks](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.md)
 // the only valid redirect URL's are the once from domains you have set when
 // added your platforms in the console interface.
-func (srv *Teams) CreateMembership(TeamId string, Email string, Roles []interface{}, Url string, Name string) (map[string]interface{}, error) {
+func (srv *Teams) CreateMembership(TeamId string, Email string, Roles []interface{}, Url string, Name string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{teamId}", TeamId)
 	path := r.Replace("/teams/{teamId}/memberships")
 
@@ -153,7 +152,7 @@ func (srv *Teams) CreateMembership(TeamId string, Email string, Roles []interfac
 }
 
 // UpdateMembershipRoles
-func (srv *Teams) UpdateMembershipRoles(TeamId string, MembershipId string, Roles []interface{}) (map[string]interface{}, error) {
+func (srv *Teams) UpdateMembershipRoles(TeamId string, MembershipId string, Roles []interface{}) (*ClientResponse, error) {
 	r := strings.NewReplacer("{teamId}", TeamId, "{membershipId}", MembershipId)
 	path := r.Replace("/teams/{teamId}/memberships/{membershipId}")
 
@@ -170,7 +169,7 @@ func (srv *Teams) UpdateMembershipRoles(TeamId string, MembershipId string, Role
 // DeleteMembership this endpoint allows a user to leave a team or for a team
 // owner to delete the membership of any other team member. You can also use
 // this endpoint to delete a user membership even if it is not accepted.
-func (srv *Teams) DeleteMembership(TeamId string, MembershipId string) (map[string]interface{}, error) {
+func (srv *Teams) DeleteMembership(TeamId string, MembershipId string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{teamId}", TeamId, "{membershipId}", MembershipId)
 	path := r.Replace("/teams/{teamId}/memberships/{membershipId}")
 
@@ -186,7 +185,7 @@ func (srv *Teams) DeleteMembership(TeamId string, MembershipId string) (map[stri
 // UpdateMembershipStatus use this endpoint to allow a user to accept an
 // invitation to join a team after being redirected back to your app from the
 // invitation email recieved by the user.
-func (srv *Teams) UpdateMembershipStatus(TeamId string, MembershipId string, UserId string, Secret string) (map[string]interface{}, error) {
+func (srv *Teams) UpdateMembershipStatus(TeamId string, MembershipId string, UserId string, Secret string) (*ClientResponse, error) {
 	r := strings.NewReplacer("{teamId}", TeamId, "{membershipId}", MembershipId)
 	path := r.Replace("/teams/{teamId}/memberships/{membershipId}/status")
 

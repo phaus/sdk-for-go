@@ -8,11 +8,10 @@ type Locale struct {
 	client Client
 }
 
-func NewLocale(clt Client) Locale {  
-	service := Locale{
+func NewLocale(clt Client) *Locale {
+	return &Locale{
 		client: clt,
 	}
-	return service
 }
 
 // Get get the current user location based on IP. Returns an object with user
@@ -21,7 +20,7 @@ func NewLocale(clt Client) Locale {
 // supported language.
 // 
 // ([IP Geolocation by DB-IP](https://db-ip.com))
-func (srv *Locale) Get() (map[string]interface{}, error) {
+func (srv *Locale) Get() (*ClientResponse, error) {
 	path := "/locale"
 
 	params := map[string]interface{}{
@@ -35,7 +34,7 @@ func (srv *Locale) Get() (map[string]interface{}, error) {
 
 // GetContinents list of all continents. You can use the locale header to get
 // the data in a supported language.
-func (srv *Locale) GetContinents() (map[string]interface{}, error) {
+func (srv *Locale) GetContinents() (*ClientResponse, error) {
 	path := "/locale/continents"
 
 	params := map[string]interface{}{
@@ -49,7 +48,7 @@ func (srv *Locale) GetContinents() (map[string]interface{}, error) {
 
 // GetCountries list of all countries. You can use the locale header to get
 // the data in a supported language.
-func (srv *Locale) GetCountries() (map[string]interface{}, error) {
+func (srv *Locale) GetCountries() (*ClientResponse, error) {
 	path := "/locale/countries"
 
 	params := map[string]interface{}{
@@ -63,7 +62,7 @@ func (srv *Locale) GetCountries() (map[string]interface{}, error) {
 
 // GetCountriesEU list of all countries that are currently members of the EU.
 // You can use the locale header to get the data in a supported language.
-func (srv *Locale) GetCountriesEU() (map[string]interface{}, error) {
+func (srv *Locale) GetCountriesEU() (*ClientResponse, error) {
 	path := "/locale/countries/eu"
 
 	params := map[string]interface{}{
@@ -77,7 +76,7 @@ func (srv *Locale) GetCountriesEU() (map[string]interface{}, error) {
 
 // GetCountriesPhones list of all countries phone codes. You can use the
 // locale header to get the data in a supported language.
-func (srv *Locale) GetCountriesPhones() (map[string]interface{}, error) {
+func (srv *Locale) GetCountriesPhones() (*ClientResponse, error) {
 	path := "/locale/countries/phones"
 
 	params := map[string]interface{}{
@@ -92,7 +91,7 @@ func (srv *Locale) GetCountriesPhones() (map[string]interface{}, error) {
 // GetCurrencies list of all currencies, including currency symbol, name,
 // plural, and decimal digits for all major and minor currencies. You can use
 // the locale header to get the data in a supported language.
-func (srv *Locale) GetCurrencies() (map[string]interface{}, error) {
+func (srv *Locale) GetCurrencies() (*ClientResponse, error) {
 	path := "/locale/currencies"
 
 	params := map[string]interface{}{
@@ -106,7 +105,7 @@ func (srv *Locale) GetCurrencies() (map[string]interface{}, error) {
 
 // GetLanguages list of all languages classified by ISO 639-1 including
 // 2-letter code, name in English, and name in the respective language.
-func (srv *Locale) GetLanguages() (map[string]interface{}, error) {
+func (srv *Locale) GetLanguages() (*ClientResponse, error) {
 	path := "/locale/languages"
 
 	params := map[string]interface{}{
