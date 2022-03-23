@@ -124,6 +124,10 @@ func (clt *Client) SetLocale(value string) {
 	clt.headers["X-Appwrite-Locale"] = value
 }
 
+func (clt *Client) SetMode(value string) {
+	clt.headers["X-Appwrite-Mode"] = value
+}
+
 func isFileUpload(headers map[string]interface{}) bool {
 	contentType, ok := headers["content-type"].(string)
 	if ok {

@@ -11,7 +11,6 @@ func main() {
 
     client.SetEndpoint("https://[HOSTNAME_OR_IP]/v1") // Your API Endpoint
     client.SetProject("") // Your project ID
-    client.SetJWT("") // Your secret JSON Web Token
 
     var service := appwrite.Account{
         client: &client

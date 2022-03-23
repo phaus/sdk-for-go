@@ -11,13 +11,12 @@ func main() {
 
     client.SetEndpoint("https://[HOSTNAME_OR_IP]/v1") // Your API Endpoint
     client.SetProject("") // Your project ID
-    client.SetKey("") // Your secret API key
 
     var service := appwrite.Database{
         client: &client
     }
 
-    var response, error := service.CreateDocument("[COLLECTION_ID]", nil, [], [], "[PARENT_DOCUMENT]", "", "assign")
+    var response, error := service.CreateDocument("[COLLECTION_ID]", "[DOCUMENT_ID]", nil, ["role:all"], ["role:all"])
 
     if error != nil {
         panic(error)

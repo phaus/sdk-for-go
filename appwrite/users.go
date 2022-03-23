@@ -17,13 +17,15 @@ func NewUsers(clt Client) *Users {
 
 // List get a list of all the project's users. You can use the query params to
 // filter your results.
-func (srv *Users) List(Search string, Limit int, Offset int, OrderType string) (*ClientResponse, error) {
+func (srv *Users) List(Search string, Limit int, Offset int, Cursor string, CursorDirection string, OrderType string) (*ClientResponse, error) {
 	path := "/users"
 
 	params := map[string]interface{}{
 		"search": Search,
 		"limit": Limit,
 		"offset": Offset,
+		"cursor": Cursor,
+		"cursorDirection": CursorDirection,
 		"orderType": OrderType,
 	}
 
@@ -34,10 +36,11 @@ func (srv *Users) List(Search string, Limit int, Offset int, OrderType string) (
 }
 
 // Create create a new user.
-func (srv *Users) Create(Email string, Password string, Name string) (*ClientResponse, error) {
+func (srv *Users) Create(UserId string, Email string, Password string, Name string) (*ClientResponse, error) {
 	path := "/users"
 
 	params := map[string]interface{}{
+		"userId": UserId,
 		"email": Email,
 		"password": Password,
 		"name": Name,
@@ -47,6 +50,21 @@ func (srv *Users) Create(Email string, Password string, Name string) (*ClientRes
 		"content-type": "application/json",
 	}
 	return srv.client.Call("POST", path, headers, params)
+}
+
+// GetUsage
+func (srv *Users) GetUsage(Range string, Provider string) (*ClientResponse, error) {
+	path := "/users/usage"
+
+	params := map[string]interface{}{
+		"range": Range,
+		"provider": Provider,
+	}
+
+	headers := map[string]interface{}{
+		"content-type": "application/json",
+	}
+	return srv.client.Call("GET", path, headers, params)
 }
 
 // Get get a user by its unique ID.
@@ -92,12 +110,14 @@ func (srv *Users) UpdateEmail(UserId string, Email string) (*ClientResponse, err
 	return srv.client.Call("PATCH", path, headers, params)
 }
 
-// GetLogs get a user activity logs list by its unique ID.
-func (srv *Users) GetLogs(UserId string) (*ClientResponse, error) {
+// GetLogs get the user activity logs list by its unique ID.
+func (srv *Users) GetLogs(UserId string, Limit int, Offset int) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}/logs")
 
 	params := map[string]interface{}{
+		"limit": Limit,
+		"offset": Offset,
 	}
 
 	headers := map[string]interface{}{
@@ -150,8 +170,9 @@ func (srv *Users) GetPrefs(UserId string) (*ClientResponse, error) {
 	return srv.client.Call("GET", path, headers, params)
 }
 
-// UpdatePrefs update the user preferences by its unique ID. You can pass only
-// the specific settings you wish to update.
+// UpdatePrefs update the user preferences by its unique ID. The object you
+// pass is stored as is, and replaces any previous value. The maximum allowed
+// prefs size is 64kB and throws error if exceeded.
 func (srv *Users) UpdatePrefs(UserId string, Prefs interface{}) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}/prefs")
@@ -209,7 +230,7 @@ func (srv *Users) DeleteSession(UserId string, SessionId string) (*ClientRespons
 }
 
 // UpdateStatus update the user status by its unique ID.
-func (srv *Users) UpdateStatus(UserId string, Status int) (*ClientResponse, error) {
+func (srv *Users) UpdateStatus(UserId string, Status bool) (*ClientResponse, error) {
 	r := strings.NewReplacer("{userId}", UserId)
 	path := r.Replace("/users/{userId}/status")
 

@@ -27,9 +27,9 @@ func (srv *Health) Get() (*ClientResponse, error) {
 	return srv.client.Call("GET", path, headers, params)
 }
 
-// GetAntiVirus check the Appwrite Anti Virus server is up and connection is
+// GetAntivirus check the Appwrite Antivirus server is up and connection is
 // successful.
-func (srv *Health) GetAntiVirus() (*ClientResponse, error) {
+func (srv *Health) GetAntivirus() (*ClientResponse, error) {
 	path := "/health/anti-virus"
 
 	params := map[string]interface{}{
@@ -101,20 +101,6 @@ func (srv *Health) GetQueueFunctions() (*ClientResponse, error) {
 // Appwrite internal queue server.
 func (srv *Health) GetQueueLogs() (*ClientResponse, error) {
 	path := "/health/queue/logs"
-
-	params := map[string]interface{}{
-	}
-
-	headers := map[string]interface{}{
-		"content-type": "application/json",
-	}
-	return srv.client.Call("GET", path, headers, params)
-}
-
-// GetQueueTasks get the number of tasks that are waiting to be processed in
-// the Appwrite internal queue server.
-func (srv *Health) GetQueueTasks() (*ClientResponse, error) {
-	path := "/health/queue/tasks"
 
 	params := map[string]interface{}{
 	}

@@ -2,12 +2,11 @@ package main
 
 import (
     "fmt"
-    "time"
     "github.com/appwrite/sdk-for-go"
 )
 
 func main() {
-    var client := appwrite.NewClient(10 * time.Second)
+    var client := appwrite.Client{}
 
     client.SetEndpoint("https://[HOSTNAME_OR_IP]/v1") // Your API Endpoint
     client.SetProject("") // Your project ID
